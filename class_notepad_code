@@ -1,0 +1,139 @@
+Git Hub Link ---> https://github.com/vivek9325/SPLK_BOA_07_07_2025.git
+
+Pre Assessment:  https://forms.cloud.microsoft/r/C3uujUZbsn
+
+
+
+https://palmetosolutions.webex.com/palmetosolutions/j.php?MTID=mc67aa7b2668ed3028c69e8de8ae8c000
+
+
+index="vk_idx" sourcetype="vk_txt" | rex field=_raw "From:\s+<(?P<from_id>.*)>\s+To"
+
+
+https://www.debuggex.com/cheatsheet/regex/pcre
+
+https://regex101.com/
+
+
+index="vk_idx" sourcetype="vk_txt" | rex field=_raw "To:\s+<(?P<to_id>.*)>"
+
+To:\s+.*<(?P<to_id>).*>
+
+
+index="vk_idx" sourcetype="vk_txt" | rex field=_raw "From:\s+<(?P<from_id>.*)>\s+To:\s+<(?P<to_id>.*)>" | table from_id, to_id
+
+
+
+|makeresults | eval text = "vk;search;savedsearch"
+   
+
+|makeresults | eval credit_card_number = "1234-5678-9101-1213"
+
+
+|makeresults | eval credit_card_number = "1234-5678-9101-1213" | rex field=credit_card_number "(?P<digit>\d{4})" max_match=0
+
+
+
+index=vk_idx | stats count by current_ticket_state | eval threshold=17 | search count>10 AND count<17
+
+
+
+| eventcount index=_* OR index=* summarize=false
+
+
+index=vk_idx source=Sample_tickets.csv 
+| table ticket_number, application_name, asset_id 
+| join type=inner ticket_number
+    [ search index=vk_idx source=Sample_lookup.csv 
+    | table ticket_number, time_taken]
+
+0 8-18 * * 1-5
+
+
+0 8-18 * * 1-5
+
+
+
+https://docs.splunk.com/Documentation
+
+
+https://community.splunk.com/
+
+
+
+  <search id="base_id">
+    
+    
+    <query>
+      
+      index=vk_idx source=sample_tickets.csv | stats count by severity, current_ticket_state
+      
+    </query>
+    
+    <earliest>0</earliest>
+    <latest>now</latest>
+    
+  </search>
+  
+
+ base_search2
+
+index=vk_idx source=sample_tickets.csv 
+|  stats count by asset_id, application_name
+
+.
+chain search ---
+
+| stats count by asset_id
+
+
+http://54.234.129.213:8000/en-US/app/launcher/home
+admin / admin@123
+
+SELECT * FROM `employee`.`emp_details`
+WHERE emp_id > ? ORDER BY emp_id ASC
+
+
+
+
+https://forms.cloud.microsoft/r/bLiMgYUcDz
+
+
+https://forms.cloud.microsoft/r/WYhvJiKxyL
+
+
+source="power_usage_2016_to_2020.csv"  index="main" sourcetype="csv"
+| timechart span=1mon avg("Value _kWh") as val
+| predict val algorithm=LL future_timespan=30
+
+
+source="power_usage_2016_to_2020.csv"  index="main" sourcetype="csv"
+| timechart span=1mon avg("Value _kWh") as val
+| predict val algorithm=LLT future_timespan=30
+
+
+source="power_usage_2016_to_2020.csv"  index="main" sourcetype="csv"
+| timechart span=1mon avg("Value _kWh") as val
+| predict val algorithm=LLP5 future_timespan=30
+
+
+source="power_usage_2016_to_2020.csv"  index="main" sourcetype="csv"
+| timechart span=1mon avg("Value _kWh") as val
+| predict val algorithm=LLP5 future_timespan=30 holdback=6 lower90=lower90_predict upper90=upper90_predict
+
+
+
+source="weather_2016_2020_daily.csv" index="main" sourcetype="csv" 
+| timechart span=1mon avg(Temp_avg) as avg_temp, avg(Dew_avg) as avg_dew 
+| predict algorithm=BiLL avg_temp, avg_dew
+
+source="weather_2016_2020_daily.csv" index="main" sourcetype="csv" 
+| timechart span=1mon avg(Temp_avg) as avg_temp, avg(Dew_avg) as avg_dew 
+| predict algorithm=BiLL avg_temp, avg_dew future_timespan=30
+
+
+
+
+
+index=_internal log_level=ERROR *handshake*
+index=_internal log_level=ERROR *permission*
