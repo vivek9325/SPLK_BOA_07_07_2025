@@ -1,0 +1,220 @@
+{
+    "title": "vk_studio_dashboard",
+    "description": "",
+    "inputs": {
+        "input_YWOJmFw2": {
+            "containerOptions": {
+                "visibility": {
+                    "hideWhenNoData": true
+                }
+            },
+            "context": {
+                "formattedConfig": {
+                    "number": {
+                        "prefix": ""
+                    }
+                },
+                "formattedStatics": ">statics | formatByType(formattedConfig)",
+                "label": ">primary | seriesByName(\"severity\") | renameSeries(\"label\") | formatByType(formattedConfig)",
+                "statics": [
+                    [
+                        "All"
+                    ],
+                    [
+                        "*"
+                    ]
+                ],
+                "value": ">primary | seriesByName(\"severity\") | renameSeries(\"value\") | formatByType(formattedConfig)"
+            },
+            "dataSources": {
+                "primary": "ds_kSMYdzcn"
+            },
+            "options": {
+                "defaultValue": "*",
+                "items": ">frame(label, value) | prepend(formattedStatics) | objects()",
+                "token": "sev"
+            },
+            "title": "severity",
+            "type": "input.dropdown"
+        },
+        "input_global_trp": {
+            "options": {
+                "defaultValue": "-24h@h,now",
+                "token": "global_time"
+            },
+            "title": "Global Time Range",
+            "type": "input.timerange"
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        }
+    },
+    "visualizations": {
+        "viz_f5xzwH7m": {
+            "dataSources": {
+                "primary": "ds_0CgrSM2J"
+            },
+            "options": {},
+            "type": "splunk.pie"
+        },
+        "viz_hWb8GrxW": {
+            "dataSources": {
+                "primary": "ds_CKdiwWos"
+            },
+            "options": {},
+            "type": "splunk.table"
+        },
+        "viz_pOj9Myrm": {
+            "options": {},
+            "type": "splunk.column"
+        },
+        "viz_ssIrxeCA": {
+            "dataSources": {
+                "primary": "ds_hYV8cDMx"
+            },
+            "options": {},
+            "type": "splunk.column"
+        }
+    },
+    "dataSources": {
+        "ds_0CgrSM2J": {
+            "name": "asset_id_chain",
+            "options": {
+                "extend": "ds_7YkUiz3u",
+                "query": "| search severity=$sev$| stats count by asset_id"
+            },
+            "type": "ds.chain"
+        },
+        "ds_7YkUiz3u": {
+            "name": "base_search2",
+            "options": {
+                "query": "index=vk_idx source=sample_tickets.csv \n|  stats count by asset_id, application_name, severity",
+                "queryParameters": {
+                    "earliest": "0",
+                    "latest": ""
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_CKdiwWos": {
+            "name": "app_name",
+            "options": {
+                "extend": "ds_7YkUiz3u",
+                "query": "| stats count by application_name"
+            },
+            "type": "ds.chain"
+        },
+        "ds_hYV8cDMx": {
+            "name": "base_search1",
+            "options": {
+                "query": "index=vk_idx source=sample_tickets.csv \n|  stats count by severity, current_ticket_state",
+                "queryParameters": {
+                    "earliest": "0",
+                    "latest": ""
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_kIBlsyHw": {
+            "name": "vk_report",
+            "options": {
+                "app": "search",
+                "ref": "vk_report"
+            },
+            "type": "ds.savedSearch"
+        },
+        "ds_kSMYdzcn": {
+            "name": "severity",
+            "options": {
+                "extend": "ds_hYV8cDMx",
+                "query": "| stats count by severity"
+            },
+            "type": "ds.chain"
+        }
+    },
+    "layout": {
+        "globalInputs": [
+            "input_global_trp",
+            "input_YWOJmFw2"
+        ],
+        "layoutDefinitions": {
+            "layout_1": {
+                "options": {
+                    "display": "auto",
+                    "height": 960,
+                    "width": 1440
+                },
+                "structure": [
+                    {
+                        "item": "viz_ssIrxeCA",
+                        "position": {
+                            "h": 400,
+                            "w": 860,
+                            "x": 0,
+                            "y": 0
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_f5xzwH7m",
+                        "position": {
+                            "h": 390,
+                            "w": 430,
+                            "x": 870,
+                            "y": 10
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_hWb8GrxW",
+                        "position": {
+                            "h": 260,
+                            "w": 850,
+                            "x": 10,
+                            "y": 410
+                        },
+                        "type": "block"
+                    }
+                ],
+                "type": "absolute"
+            },
+            "layout_nuQi8Uk8": {
+                "structure": [
+                    {
+                        "item": "viz_pOj9Myrm",
+                        "position": {
+                            "h": 400,
+                            "w": 1200,
+                            "x": 0,
+                            "y": 0
+                        },
+                        "type": "block"
+                    }
+                ],
+                "type": "grid"
+            }
+        },
+        "options": {},
+        "tabs": {
+            "items": [
+                {
+                    "label": "Health",
+                    "layoutId": "layout_1"
+                },
+                {
+                    "label": "Count",
+                    "layoutId": "layout_nuQi8Uk8"
+                }
+            ]
+        }
+    }
+}
